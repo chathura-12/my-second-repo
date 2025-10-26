@@ -1,8 +1,11 @@
-import Nav from './Nav';
-
+import Header from "./Header"
 export default function Homepage(){
     return (
-        <Nav/>
+        <>
+            <h1>This is the Homepage</h1>
+            <Header/>
+        </>
+        
     )
 }
 
