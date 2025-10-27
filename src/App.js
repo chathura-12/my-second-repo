@@ -1,12 +1,14 @@
 import Navbar from './Navbar';
+import Main from './Main';
+import React from 'react';
 import './App.css';
 
-function App() {
+export default function App() {
   return (
     <>
       <Navbar/>
+      <Main/>
     </>
-  );
+  )
 }
 
-export default App;

@@ -1,66 +1,73 @@
 import React, {useState} from "react";
 
-export default function BookingForm({availableTime, dispatch}) {
-    const [date, setDate] = useState("");
-    const [time, setTime] = useState("");
-    const [guests, setGuests] = useState(1);
-    const [occation, setOccation] = useState("");
-    const [state, setState] = useState(true)
+const BookingForm = (props) => {
 
-    const occations = ["Birthday", "Anniversary"];
+  const [date, setDate] = useState("")
+  const [time, setTime] = useState("")
+  const [guests, setGuests] = useState(1)
+  const [occasion, setOccasion] = useState("")
+  const [success, setSuccess] = useState("")
 
-    const handleState = () => {
-        setState(!state);
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setSuccess("Reservation successful!")
+    setDate("")
+    setTime("")
+    setGuests(1)
+    setOccasion("")
+  }
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        // handle form submission logic here
-    }
-
-    const handleDate = (e) => {
-        setDate(e.target.value);
-        dispatch({type: 'Update_time', payload: {date: e.target.value}});
-    }
-    return (
-
+  const handleChange = (e) => {
+    setDate(e)
+    props.dispatch(e)
+  }
+  return (
+    <header>
+      <section>
         <form onSubmit={handleSubmit}>
-            <label htmlFor="res-date">Choose date</label>
-            <input
-                onChange={handleDate}
-                type="date"
-                id="res-date"
-            />
-            <p>date is: {date}</p>
-            <label htmlFor="res-time">Choose time</label>
-            <select
-                id="res-time "
-                onChange={(e) => setTime(e.target.value)}>
-                {Array.isArray(availableTime) &&
-                    availableTime.map((option) => (
-                    <option value={option}>{option}</option>
-                ))}
-            <p>Time is: {time}</p>
-            </select>
-            <label htmlFor="guests">Number of guests</label>
-            <input
-                onChange={(e) => setGuests(e.target.value)}
-                type="number"
-                placeholder="1"
-                min="1"
-                max="10"
-                id="guests"
-            />
-            <p>guests: {guests}</p>
-            <label htmlFor="occasion">Occasion</label>
-            <select id="occasion" onChange={(e) => setOccation(e.target.value)}>
-                {occations.map((oc) => (
-                    <option value={oc}>{oc}</option>
-                ))}
-            </select>
-            <p>Occation is: {occation}</p>
-            <p>This seat is: {state ? 'Yes':'No'}</p>
-            <button onClick={handleState} type="submit">Submit</button>
+          <fieldset>
+            <div>
+              <label htmlFor="book-date">Choose Date</label>
+              <input id='book-date' value={date} onChange={(e) => handleChange(e.target.value)} type="date" required/>
+            </div>
+            <div>
+              <label htmlFor="book-time">Choose Time</label>
+              <select id='book-time' value={time} onChange={e => setTime(e.target.value)}>
+                 <option value="">Select a Time</option>
+                 {
+                    (props.availableTimes || ["19:00", "20:00", "21:00", "22:00"]).map(timeOption => (
+                      <option key={timeOption} value={timeOption}>
+                        {timeOption}
+                      </option>
+                    ))
+                 }
+              </select>
+            </div>
+            <div>
+              <label htmlFor="book-guests">Number of guests</label>
+              <input
+                id="book-guests"
+                min='1' max='10'
+                value={guests}
+                onChange={e => setGuests(e.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="book-occasion">Occasion</label>
+              <select id='book-occasion' value={occasion} onChange={e => setOccasion(e.target.value)}>
+                 <option>Birthday</option>
+                 <option>Anniversary</option>
+              </select>
+            </div>
+            <div className="btnRecieve">
+              <input aria-label="On Click" type="submit" value={"Make Your Reservation"}/>
+            </div>
+            {success && <p className="success-message">{success}</p>}
+          </fieldset>
         </form>
-    )
+      </section>
+    </header>
+  );
 }
+
+export default BookingForm;
